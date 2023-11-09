@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 
 import "../../../styles/product-card.css";
 
@@ -6,8 +6,10 @@ import { Link } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
+import Popup from '../cart/Popup.jsx'
 
 const ProductCard = (props) => {
+  const [showPopup, setShowPopup] = useState(false);
   const { id, title, image01, price } = props.item;
   const dispatch = useDispatch();
 
@@ -20,6 +22,13 @@ const ProductCard = (props) => {
         price,
       })
     );
+
+    setShowPopup(true);
+
+    // Close the popup after a certain time (e.g., 3 seconds)
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 1250);
   };
 
   return (
@@ -37,6 +46,7 @@ const ProductCard = (props) => {
           <button className="addTOCart__btn" onClick={addToCart}>
             + Carrinho
           </button>
+          <Popup showPopup={showPopup} item={props.item} onClose={() => setShowPopup(false)} />
         </div>
       </div>
     </div>
