@@ -3,98 +3,119 @@ import { useSelector } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "../styles/checkout.css";
 
-const Checkout = () => {
-  const [enterName, setEnterName] = useState("");
-  const [enterNumber, setEnterNumber] = useState("");
-  const [enterStreet, setEnterStreet] = useState("");
-  const [enterStreetNumber, setEnterStreetNumber] = useState("");
-  const [enterCity, setEnterCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
+const Payment = () => {
+  const [enterCreditCard, setEnterCreditCard] = useState("");
+  const [enterExpirationDate, setEnterExpirationDate] = useState("");
+  const [enterCVV, setEnterCVV] = useState("");
+  const [enterCPF, setEnterCPF] = useState("");
+  const [enterFullName, setEnterFullName] = useState("");
+  const [enterBillingAddress, setEnterBillingAddress] = useState("");
 
-  const shippingInfo = [];
+
+  const paymentInfo = []
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
+  const totalAmount = cartTotalAmount;
   const shippingCost = 'Grátis';
 
-  const totalAmount = cartTotalAmount;
+  const location = useLocation();
+  const shippingInfo = location.state && location.state.shippingInfo;
 
   const navigate = useNavigate();
 
+  const formatExpirationDate = (input) => {
+    const numericValue = input.replace(/\D/g, "");
+
+    if (numericValue.length <= 2) {
+      setEnterExpirationDate(numericValue);
+    } else {
+      const formattedDate =
+        numericValue.slice(0, 2) + " / " + numericValue.slice(2, 4);
+      setEnterExpirationDate(formattedDate);
+    }
+  };
+
+  const handleExpirationDateChange = (e) => {
+    formatExpirationDate(e.target.value);
+  };
+
   const submitHandler = (e) => {
     e.preventDefault();
-    const userShippingAddress = {
-      name: enterName,
-      phone: enterNumber,
-      street: enterStreet,
-      streetNumber: enterStreetNumber,
-      city: enterCity,
-      postalCode: postalCode,
+    const userPaymentInfo = {
+      creditCard: enterCreditCard,
+      expirationDate: enterExpirationDate,
+      cvv: enterCVV,
+      cpf: enterCPF,
+      name: enterFullName,
+      address: enterBillingAddress,
     };
 
-    shippingInfo.push(userShippingAddress);
-    console.log(shippingInfo);
+    paymentInfo.push(userPaymentInfo);
 
-    navigate("/payment", { state: { shippingInfo } });
+    navigate("/review", { state: { paymentInfo, shippingInfo } });
+
   };
 
   return (
-    <Helmet title="Checkout">
-      <CommonSection title="Checkout" />
+    <Helmet title="Pagamento">
+      <CommonSection title="Pagamento" />
       <section>
         <Container>
           <Row>
             <Col lg="8" md="6">
-              <h6 className="mb-4">Endereço</h6>
+              <h6 className="mb-4">Informações do Pagamento</h6>
               <form className="checkout__form" onSubmit={submitHandler}>
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Nome completo"
+                    placeholder="Numéro do cartão"
                     required
-                    onChange={(e) => setEnterName(e.target.value)}
+                    onChange={(e) => setEnterCreditCard(e.target.value)}
+                  />
+                </div>
+
+                <div className="form__group">
+                <input
+                    type="text"
+                    placeholder="Validade"
+                    required
+                    value={enterExpirationDate}
+                    onChange={handleExpirationDateChange}
                   />
                 </div>
                 <div className="form__group">
                   <input
                     type="number"
-                    placeholder="Telefone"
+                    placeholder="CVV"
                     required
-                    onChange={(e) => setEnterNumber(e.target.value)}
+                    onChange={(e) => setEnterCVV(e.target.value)}
                   />
                 </div>
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Rua"
+                    placeholder="CPF"
                     required
-                    onChange={(e) => setEnterStreet(e.target.value)}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="number"
-                    placeholder="Numero"
-                    required
-                    onChange={(e) => setEnterStreetNumber(e.target.value)}
+                    onChange={(e) => setEnterCPF(e.target.value)}
                   />
                 </div>
                 <div className="form__group">
                   <input
                     type="text"
-                    placeholder="Cidade"
+                    placeholder="Nome Completo"
                     required
-                    onChange={(e) => setEnterCity(e.target.value)}
+                    onChange={(e) => setEnterFullName(e.target.value)}
                   />
                 </div>
                 <div className="form__group">
                   <input
-                    type="number"
-                    placeholder="CEP"
+                    type="text"
+                    placeholder="Endereço de Cobrança"
                     required
-                    onChange={(e) => setPostalCode(e.target.value)}
+                    onChange={(e) => setEnterBillingAddress(e.target.value)}
                   />
                 </div>
                 <button type="submit" className="addTOCart__btn">
@@ -125,4 +146,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default Payment;

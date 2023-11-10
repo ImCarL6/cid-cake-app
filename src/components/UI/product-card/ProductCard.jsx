@@ -25,7 +25,6 @@ const ProductCard = (props) => {
 
     setShowPopup(true);
 
-    // Close the popup after a certain time (e.g., 3 seconds)
     setTimeout(() => {
       setShowPopup(false);
     }, 1250);
