@@ -169,16 +169,6 @@ const EditShippingForm = ({ shippingInfo, setShippingInfo, onSave }) => {
         />
       </FormGroup>
       <FormGroup>
-        <Label for="email">Email:</Label>
-        <Input
-          type="email"
-          name="email"
-          id="email"
-          value={editedShippingInfo.email}
-          onChange={handleChange}
-        />
-      </FormGroup>
-      <FormGroup>
         <Label for="phone">Telefone:</Label>
         <Input
           type="number"
@@ -189,12 +179,22 @@ const EditShippingForm = ({ shippingInfo, setShippingInfo, onSave }) => {
         />
       </FormGroup>
       <FormGroup>
-        <Label for="country">País:</Label>
+        <Label for="street">Rua:</Label>
         <Input
           type="text"
-          name="country"
-          id="country"
-          value={editedShippingInfo.country}
+          name="street"
+          id="street"
+          value={editedShippingInfo.street}
+          onChange={handleChange}
+        />
+      </FormGroup>
+      <FormGroup>
+        <Label for="streetNumber">Número:</Label>
+        <Input
+          type="text"
+          name="streetNumber"
+          id="streetNumber"
+          value={editedShippingInfo.streetNumber}
           onChange={handleChange}
         />
       </FormGroup>
