@@ -33,9 +33,12 @@ const ProductCard = (props) => {
 
   return (
     <div className="product__item">
+
+      <Link to={`/foods/${id}`}>
       <div className="product__img">
         <img src={image01} alt="product-img" className="w-50" />
       </div>
+      </Link>
 
       <div className="product__content">
         <h5>

@@ -12,8 +12,10 @@ import { cartActions } from "../store/shopping-cart/cartSlice";
 import "../styles/product-details.css";
 
 import ProductCard from "../components/UI/product-card/ProductCard";
+import Popup from '../components/UI/cart/Popup'
 
 const FoodDetails = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const [tab, setTab] = useState("desc");
   const [enteredName, setEnteredName] = useState("");
   const [enteredEmail, setEnteredEmail] = useState("");
@@ -36,6 +38,13 @@ const FoodDetails = () => {
         image01,
       })
     );
+
+    setShowPopup(true);
+
+    // Close the popup after a certain time (e.g., 3 seconds)
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 1250);
   };
 
   const submitHandler = (e) => {
@@ -94,15 +103,16 @@ const FoodDetails = () => {
                 <h2 className="product__title mb-3">{title}</h2>
                 <p className="product__price">
                   {" "}
-                  Price: <span>${price}</span>
+                  Preço: <span>${price}</span>
                 </p>
                 <p className="category mb-5">
-                  Category: <span>{category}</span>
+                  Categoria: <span>{category === 'Cake' ? 'Bolo' : category === 'Pie' ? 'Torta' : 'Cupcake'}</span>
                 </p>
 
                 <button onClick={addItem} className="addTOCart__btn">
-                  Add to Cart
+                  + Carrinho
                 </button>
+                < Popup showPopup={showPopup} item={product} onClose={() => setShowPopup(false)} />
               </div>
             </Col>
 
@@ -112,13 +122,13 @@ const FoodDetails = () => {
                   className={` ${tab === "desc" ? "tab__active" : ""}`}
                   onClick={() => setTab("desc")}
                 >
-                  Description
+                  Descrição
                 </h6>
                 <h6
                   className={` ${tab === "rev" ? "tab__active" : ""}`}
                   onClick={() => setTab("rev")}
                 >
-                  Review
+                  Opiniões
                 </h6>
               </div>
 
@@ -131,25 +141,25 @@ const FoodDetails = () => {
                   <div className="review pt-5">
                     <p className="user__name mb-0">Jhon Doe</p>
                     <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
+                    <p className="feedback__text">Ótimo</p>
                   </div>
 
                   <div className="review">
                     <p className="user__name mb-0">Jhon Doe</p>
                     <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
+                    <p className="feedback__text">Excelente</p>
                   </div>
 
                   <div className="review">
                     <p className="user__name mb-0">Jhon Doe</p>
                     <p className="user__email">jhon1@gmail.com</p>
-                    <p className="feedback__text">great product</p>
+                    <p className="feedback__text">Muito bom!</p>
                   </div>
                   <form className="form" onSubmit={submitHandler}>
                     <div className="form__group">
                       <input
                         type="text"
-                        placeholder="Enter your name"
+                        placeholder="Nome completo"
                         onChange={(e) => setEnteredName(e.target.value)}
                         required
                       />
@@ -168,14 +178,14 @@ const FoodDetails = () => {
                       <textarea
                         rows={5}
                         type="text"
-                        placeholder="Write your review"
+                        placeholder="Conte-nos o que achou!"
                         onChange={(e) => setReviewMsg(e.target.value)}
                         required
                       />
                     </div>
 
                     <button type="submit" className="addTOCart__btn">
-                      Submit
+                      Enviar
                     </button>
                   </form>
                 </div>
@@ -183,7 +193,7 @@ const FoodDetails = () => {
             </Col>
 
             <Col lg="12" className="mb-5 mt-4">
-              <h2 className="related__Product-title">You might also like</h2>
+              <h2 className="related__Product-title">Recomendados</h2>
             </Col>
 
             {relatedProduct.map((item) => (
