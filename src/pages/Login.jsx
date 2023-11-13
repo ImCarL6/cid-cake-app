@@ -1,15 +1,50 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+
+import "../styles/home.css";
+
 
 const Login = () => {
-  const loginNameRef = useRef();
+  const loginEmailRef = useRef();
   const loginPasswordRef = useRef();
 
-  const submitHandler = (e) => {
+  const location = useLocation();
+  const loginEmail = location.state && location.state.username;
+
+  const [loginStatus, setLoginStatus] = useState(null);
+
+  try {
+    useEffect(() => {
+      if (loginEmail) {
+        loginEmailRef.current.value = loginEmail;
+      }
+    }, [loginEmail]);
+  } catch (e) {
+    console.log(e)
+  }
+
+  const submitHandler = async (e) => {
     e.preventDefault();
+
+    try {
+      const response = await axios.post(
+        "https://z0vlzp3ki1.execute-api.sa-east-1.amazonaws.com/dev/login",
+        {
+          username: loginEmailRef.current.value,
+          password: loginPasswordRef.current.value,
+        }
+      );
+
+      if (response.status === 200) {
+        setLoginStatus("success");
+      }
+    } catch (error) {
+      setLoginStatus("error");
+    }
   };
 
   return (
@@ -19,30 +54,38 @@ const Login = () => {
         <Container>
           <Row>
             <Col lg="6" md="6" sm="12" className="m-auto text-center">
-              <form className="form mb-5" onSubmit={submitHandler}>
-                <div className="form__group">
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    required
-                    ref={loginNameRef}
-                  />
+              {loginStatus === "success" ? (
+                <div className="confirmation__message">
+                  <p>Login efetuado.</p>
                 </div>
-                <div className="form__group">
-                  <input
-                    type="password"
-                    placeholder="Senha"
-                    required
-                    ref={loginPasswordRef}
-                  />
+              ) : loginStatus === "error" ? (
+                <div className="confirmation__message error">
+                  <p>O login/senha é inválido.</p>
                 </div>
-                <button type="submit" className="addTOCart__btn">
-                  Login
-                </button>
-              </form>
-              <Link to="/register">
-                Criar conta
-              </Link>
+              ) : (
+                <form className="form mb-5" onSubmit={submitHandler}>
+                  <div className="form__group">
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      required
+                      ref={loginEmailRef}
+                    />
+                  </div>
+                  <div className="form__group">
+                    <input
+                      type="password"
+                      placeholder="Senha"
+                      required
+                      ref={loginPasswordRef}
+                    />
+                  </div>
+                  <button type="submit" className="addTOCart__btn">
+                    Login
+                  </button>
+                </form>
+              )}
+              <Link to="/register">Criar conta</Link>
             </Col>
           </Row>
         </Container>

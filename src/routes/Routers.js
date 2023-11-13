@@ -11,6 +11,7 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Payment from "../pages/Payment";
 import Review from "../pages/Review";
+import Order from "../pages/Order";
 
 const Routers = () => {
   return (
@@ -26,6 +27,7 @@ const Routers = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/payment" element={<Payment />} />
       <Route path="/review" element={<Review />} />
+      <Route path="/order" element={<Order />} />
     </Routes>
   );
 };
