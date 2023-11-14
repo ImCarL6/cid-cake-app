@@ -37,6 +37,7 @@
 
 .cart__icon i,
 .user i,
+.userLogged i,
 .mobile__menu i {
   font-size: 1.3rem;
   color: #212245;
