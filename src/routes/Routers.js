@@ -12,6 +12,7 @@ import Register from "../pages/Register";
 import Payment from "../pages/Payment";
 import Review from "../pages/Review";
 import Order from "../pages/Order";
+import User from "../pages/User";
 
 const Routers = () => {
   return (
@@ -28,6 +29,7 @@ const Routers = () => {
       <Route path="/payment" element={<Payment />} />
       <Route path="/review" element={<Review />} />
       <Route path="/order" element={<Order />} />
+      <Route path="/user" element={<User />} />
     </Routes>
   );
 };

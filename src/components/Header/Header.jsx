@@ -6,7 +6,7 @@ import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
-import { selectUserName } from "../../store/user/userSlice";
+import { selectUser } from "../../store/user/userSlice";
 
 import "../../styles/header.css";
 
@@ -33,7 +33,7 @@ const Header = () => {
   const menuRef = useRef(null);
   const headerRef = useRef(null);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
-  const userName = useSelector(selectUserName);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
@@ -90,16 +90,14 @@ const Header = () => {
               <span className="cart__badge">{totalQuantity}</span>
             </span>
 
-            {userName ? (
-              // Render when user is logged in
+            {user ? (
               <span className="userLogged">
-                <Link to="/login">
+                <Link to="/user">
                   <i className="ri-user-line"></i>
-                  {userName}
+                  {user.name}
                 </Link>
               </span>
             ) : (
-              // Render when user is not logged in
               <span className="user">
                 <Link to="/login">
                   <i class="ri-user-line"></i>

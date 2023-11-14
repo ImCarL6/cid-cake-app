@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
-import { setUserName } from "../store/user/userSlice";
+import { setUser } from "../store/user/userSlice";
 import { Container, Row, Col } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -45,7 +45,7 @@ const Login = () => {
       );
 
       if (response.status === 200) {
-        dispatch(setUserName(response.data.user.name));
+        dispatch(setUser(response.data.user));
         setLoginStatus("success");
       }
     } catch (error) {

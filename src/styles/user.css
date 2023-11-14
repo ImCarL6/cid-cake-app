@@ -1,0 +1,16 @@
+
+.user__section {
+  background: #fde4e4;
+  padding: 30px;
+}
+
+@media only screen and (max-width: 768px) {
+
+  .user__section h6 {
+    font-size: 0.9rem;
+  }
+  .user__section {
+    margin-top: 40px;
+  }
+}
+
