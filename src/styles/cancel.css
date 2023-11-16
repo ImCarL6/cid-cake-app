@@ -1,0 +1,18 @@
+.Cancelado {
+  margin-top: 20px;
+}
+
+legend {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-check-label {
+  margin-left: 10px;
+}

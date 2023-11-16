@@ -13,6 +13,8 @@ import Payment from "../pages/Payment";
 import Review from "../pages/Review";
 import Order from "../pages/Order";
 import User from "../pages/User";
+import Confirm from "../pages/Confirm";
+import Cancel from "../pages/Cancel";
 
 const Routers = () => {
   return (
@@ -30,6 +32,8 @@ const Routers = () => {
       <Route path="/review" element={<Review />} />
       <Route path="/order" element={<Order />} />
       <Route path="/user" element={<User />} />
+      <Route path="/confirm" element={<Confirm />} />
+      <Route path="/cancel" element={<Cancel />} />
     </Routes>
   );
 };

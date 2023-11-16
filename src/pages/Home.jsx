@@ -24,6 +24,8 @@ const Home = () => {
   const [category, setCategory] = useState("ALL");
   const [allProducts, setAllProducts] = useState(products);
 
+  let typeObj = {icon: 'home'}
+
   useEffect(() => {
     if (category === "ALL") {
       setAllProducts(products);
@@ -104,7 +106,7 @@ const Home = () => {
       </section>
 
       <section className="pt-0">
-        <Category />
+        <Category {...typeObj} />
       </section>
 
 
