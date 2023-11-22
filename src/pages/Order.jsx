@@ -20,6 +20,8 @@ const Order = () => {
   const totalAmount = cartTotalAmount;
   const shippingCost = "Grátis";
 
+  console.log(cartItems)
+
   const location = useLocation();
   const orderInfo = location.state && location.state.orderInfo;
 
@@ -65,6 +67,7 @@ const Order = () => {
                       <th>Produto</th>
                       <th>Preço</th>
                       <th>Quantidade</th>
+                      <th>Adicionais</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -157,7 +160,7 @@ const PaymentInfoView = ({ paymentInfo }) => (
 );
 
 const Tr = (props) => {
-  const { image01, title, price, quantity } = props.item;
+  const { image01, title, price, quantity, selectedOptions } = props.item;
 
   return (
     <tr>
@@ -167,8 +170,15 @@ const Tr = (props) => {
       <td className="text-center">{title}</td>
       <td className="text-center">R${price}</td>
       <td className="text-center">{quantity}</td>
+      <td className="text-center">
+        <ul>
+          {selectedOptions.map((option, index) => (
+            <li key={index}>{option}</li>
+          ))}
+        </ul>
+      </td>
     </tr>
   );
-};
+};  
 
 export default Order;

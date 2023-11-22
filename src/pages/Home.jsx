@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 import Helmet from "../components/Helmet/Helmet.js";
 import { Container, Row, Col } from "reactstrap";
@@ -6,9 +10,8 @@ import { Container, Row, Col } from "reactstrap";
 import heroImg from "../assets/images/hero.png";
 import "../styles/hero-section.css";
 
-import { Link } from "react-router-dom";
-
 import Category from "../components/UI/category/Category.jsx";
+import { setUser } from "../store/user/userSlice";
 
 import "../styles/home.css";
 
@@ -23,6 +26,8 @@ import ProductCard from "../components/UI/product-card/ProductCard.jsx";
 const Home = () => {
   const [category, setCategory] = useState("ALL");
   const [allProducts, setAllProducts] = useState(products);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   let typeObj = {icon: 'home'}
 
@@ -54,7 +59,34 @@ const Home = () => {
 
       setAllProducts(filteredProducts);
     }
-  }, [category]);
+
+    const verifyUser = async () => {
+      const userUsername = Cookies.get("userLogin");
+      const userToken = Cookies.get("userAuth");
+
+      if (userUsername && userToken) {
+        try {
+          const response = await axios.post(
+            "https://z0vlzp3ki1.execute-api.sa-east-1.amazonaws.com/dev/verify",
+            {
+              username: userUsername,
+              token: userToken,
+            }
+          );
+
+          if (response.status === 200) {
+            console.log('Login verified!', response.data.verified)
+            const userName = Cookies.get("userName");
+            dispatch(setUser({username: userUsername ,name: userName}));
+          }
+        } catch (error) {
+          console.error("User verification failed: log again", error);
+        }
+      }
+    };
+
+    verifyUser()
+  }, [category, navigate, dispatch]);
 
   return (
     <Helmet title="Início">
@@ -74,21 +106,21 @@ const Home = () => {
 
                 <div className="hero__btns d-flex align-items-center gap-5 mt-4">
                   <button className="order__btn d-flex align-items-center justify-content-between">
-                  <Link to="/foods">Peça um agora <i class="ri-arrow-right-s-line"></i> </Link>
+                  <Link to="/foods">Peça um agora <i className="ri-arrow-right-s-line"></i> </Link>
                   </button>
                 </div>
 
                 <div className=" hero__service  d-flex align-items-center gap-5 mt-5 ">
                   <p className=" d-flex align-items-center gap-2 ">
                     <span className="shipping__icon">
-                      <i class="ri-car-line"></i>
+                      <i className="ri-car-line"></i>
                     </span>{" "}
                     Frete grátis
                   </p>
 
                   <p className=" d-flex align-items-center gap-2 ">
                     <span className="shipping__icon">
-                      <i class="ri-shield-check-line"></i>
+                      <i className="ri-shield-check-line"></i>
                     </span>{" "}
                     Segurança certificada
                   </p>

@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from "react";
 
 import { Container } from "reactstrap";
 import logo from "../../assets/images/res-logo.png";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
@@ -20,10 +20,6 @@ const nav__links = [
     path: "/foods",
   },
   {
-    display: "Carrinho",
-    path: "/cart",
-  },
-  {
     display: "Contato",
     path: "/contact",
   },
@@ -35,6 +31,7 @@ const Header = () => {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
@@ -42,12 +39,14 @@ const Header = () => {
     dispatch(cartUiActions.toggle());
   };
 
+  const navHome = () => {navigate('/home')}
+
   useEffect(() => {
     window.addEventListener("scroll", () => {
       if (
         document.body.scrollTop > 80 ||
         document.documentElement.scrollTop > 80
-      ) {
+      ) { 
         headerRef.current.classList.add("header__shrink");
       } else {
         headerRef.current.classList.remove("header__shrink");
@@ -62,7 +61,7 @@ const Header = () => {
       <Container>
         <div className="nav__wrapper d-flex align-items-center justify-content-between">
           <div className="logo">
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" onClick={navHome} />
             <h5>Cid Cakes</h5>
           </div>
 
@@ -86,7 +85,7 @@ const Header = () => {
           {/* ======== nav right icons ========= */}
           <div className="nav__right d-flex align-items-center gap-4">
             <span className="cart__icon" onClick={toggleCart}>
-              <i class="ri-shopping-basket-line"></i>
+              <i className="ri-shopping-basket-line"></i>
               <span className="cart__badge">{totalQuantity}</span>
             </span>
 
@@ -100,13 +99,13 @@ const Header = () => {
             ) : (
               <span className="user">
                 <Link to="/login">
-                  <i class="ri-user-line"></i>
+                  <i className="ri-user-line"></i>
                 </Link>
               </span>
             )}
 
             <span className="mobile__menu" onClick={toggleMenu}>
-              <i class="ri-menu-line"></i>
+              <i className="ri-menu-line"></i>
             </span>
           </div>
         </div>

@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from "react";
-
 import products from "../assets/fake-data/products";
 import { useParams } from "react-router-dom";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
-
 import { useDispatch } from "react-redux";
 import { cartActions } from "../store/shopping-cart/cartSlice";
-
 import "../styles/product-details.css";
-
 import ProductCard from "../components/UI/product-card/ProductCard";
-import Popup from '../components/UI/cart/Popup'
+import Popup from "../components/UI/cart/Popup";
 
 const FoodDetails = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -27,15 +23,54 @@ const FoodDetails = () => {
   const [previewImg, setPreviewImg] = useState(product.image01);
   const { title, price, category, desc, image01 } = product;
 
-  const relatedProduct = products.filter((item) => category === item.category);
+  const relatedProduct = products.filter(
+    (item) => category === item.category && item.id !== id
+  );
+
+  const [selectedOptions, setSelectedOptions] = useState([]);
+
+  const handleOptionChange = (option) => {
+    const index = selectedOptions.indexOf(option);
+
+    if (index === -1) {
+      setSelectedOptions([...selectedOptions, option]);
+    } else {
+      const updatedOptions = [...selectedOptions];
+      updatedOptions.splice(index, 1);
+      setSelectedOptions(updatedOptions);
+    }
+  };
+
+  const calculateTotalPrice = () => {
+    let totalPrice = price;
+
+    selectedOptions.forEach((option) => {
+      switch (option) {
+        case "Café preto":
+          totalPrice += 2;
+          break;
+        case "Cappuccino":
+          totalPrice += 3;
+          break;
+        case "Suco Natural":
+          totalPrice += 4;
+          break;
+        default:
+          break;
+      }
+    });
+
+    return totalPrice;
+  };
 
   const addItem = () => {
     dispatch(
       cartActions.addItem({
         id,
         title,
-        price,
+        price: calculateTotalPrice(),
         image01,
+        selectedOptions
       })
     );
 
@@ -102,16 +137,58 @@ const FoodDetails = () => {
                 <h2 className="product__title mb-3">{title}</h2>
                 <p className="product__price">
                   {" "}
-                  Preço: <span>${price}</span>
+                  Preço: <span>${calculateTotalPrice()}</span>
                 </p>
                 <p className="category mb-5">
-                  Categoria: <span>{category === 'Cake' ? 'Bolo' : category === 'Pie' ? 'Torta' : 'Cupcake'}</span>
+                  Categoria:{" "}
+                  <span>
+                    {category === "Cake"
+                      ? "Bolo"
+                      : category === "Pie"
+                      ? "Torta"
+                      : "Cupcake"}
+                  </span>
                 </p>
+
+                <div className="options mb-3">
+                  <div className="option">
+                    <label>
+                      <input
+                        type="checkbox"
+                        onChange={() => handleOptionChange("Café preto")}
+                      />
+                      Café preto {'(+R$ 2)'}
+                    </label>
+                  </div>
+                  <div className="option">
+                    <label>
+                      <input
+                        type="checkbox"
+                        onChange={() => handleOptionChange("Cappuccino")}
+                      />
+                      Cappuccino {'(+R$ 3)'}
+                    </label>
+                  </div>
+                  <div className="option">
+                    <label>
+                      <input
+                        type="checkbox"
+                        onChange={() => handleOptionChange("Suco Natural")}
+                      />
+                      Suco Natural {'(+R$ 4)'}
+                    </label>
+                  </div>
+                  {/* Add more options as needed */}
+                </div>
 
                 <button onClick={addItem} className="addTOCart__btn">
                   + Carrinho
                 </button>
-                < Popup showPopup={showPopup} item={product} onClose={() => setShowPopup(false)} />
+                <Popup
+                  showPopup={showPopup}
+                  item={product}
+                  onClose={() => setShowPopup(false)}
+                />
               </div>
             </Col>
 

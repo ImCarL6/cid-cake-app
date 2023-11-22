@@ -94,6 +94,26 @@
   font-size: 1.4rem;
 }
 
+.options {
+  background: #fde4e4;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.option label {
+  font-weight: 600;
+  color: #212245;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 10px;
+}
+
+.option input {
+  margin-right: 5px;
+}
+
 @media only screen and (max-width: 768px) {
   .product__title {
     font-size: 1.2rem;

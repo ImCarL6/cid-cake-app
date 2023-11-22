@@ -6,8 +6,10 @@ import "../../../styles/cart-item.css";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
 
-const CartItem = ({ item }) => {
+const CartItem = ({ item, selectedOptions }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
+
+  console.log(selectedOptions);
 
   const dispatch = useDispatch();
 
@@ -18,6 +20,7 @@ const CartItem = ({ item }) => {
         title,
         price,
         image01,
+        selectedOptions,
       })
     );
   };
@@ -41,19 +44,29 @@ const CartItem = ({ item }) => {
             <p className=" d-flex align-items-center gap-5 cart__product-price">
               {quantity}x <span>R${totalPrice}</span>
             </p>
+            {Array.isArray(selectedOptions) && selectedOptions.length > 0 && (
+              <div className="selected-options">
+                <p>Opções:</p>
+                <ul>
+                  {selectedOptions.map((option, index) => (
+                    <li key={index}>{option}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
             <div className=" d-flex align-items-center justify-content-between increase__decrease-btn">
               <span className="increase__btn" onClick={incrementItem}>
-                <i class="ri-add-line"></i>
+                <i className="ri-add-line"></i>
               </span>
               <span className="quantity">{quantity}</span>
               <span className="decrease__btn" onClick={decreaseItem}>
-                <i class="ri-subtract-line"></i>
+                <i className="ri-subtract-line"></i>
               </span>
             </div>
           </div>
 
           <span className="delete__btn" onClick={deleteItem}>
-            <i class="ri-close-line"></i>
+            <i className="ri-close-line"></i>
           </span>
         </div>
       </div>

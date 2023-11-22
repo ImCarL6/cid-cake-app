@@ -6,10 +6,9 @@ import { Container, Row, Col } from "reactstrap";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-
+import Cookies from "js-cookie";
 
 import "../styles/home.css";
-
 
 const Login = () => {
   const loginEmailRef = useRef();
@@ -29,7 +28,7 @@ const Login = () => {
       }
     }, [loginEmail]);
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
 
   const submitHandler = async (e) => {
@@ -47,6 +46,10 @@ const Login = () => {
       if (response.status === 200) {
         dispatch(setUser(response.data.user));
         setLoginStatus("success");
+
+        Cookies.set("userLogin", response.data.user.username);
+        Cookies.set("userName", response.data.user.name);
+        Cookies.set("userAuth", response.data.token);
       }
     } catch (error) {
       setLoginStatus("error");
@@ -89,6 +92,9 @@ const Login = () => {
                   <button type="submit" className="addTOCart__btn">
                     Login
                   </button>
+                  <div className="mt-3 ">
+                  <Link to="/reset-password">Esqueceu sua senha?</Link>
+                  </div>
                 </form>
               )}
               <Link to="/register">Criar conta</Link>

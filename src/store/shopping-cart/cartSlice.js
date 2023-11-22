@@ -48,6 +48,7 @@ const cartSlice = createSlice({
           price: newItem.price,
           quantity: 1,
           totalPrice: newItem.price,
+          selectedOptions: newItem.selectedOptions
         });
       } else {
         existingItem.quantity++;

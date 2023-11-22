@@ -56,7 +56,7 @@ const Footer = () => {
             <div className="newsletter">
               <input type="email" placeholder="Insira o seu email" />
               <span>
-                <i class="ri-send-plane-line"></i>
+                <i className="ri-send-plane-line"></i>
               </span>
             </div>
           </Col>

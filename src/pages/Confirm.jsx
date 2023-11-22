@@ -12,7 +12,7 @@ const Confirm = () => {
           <Row>
             <Col lg="6" md="6" sm="12" className="m-auto text-center">
               <div className="Confirmado">
-                <h6>Pedido confirmado! Bom apetite! </h6>
+                <h6>Recebimento confirmado! Bom apetite! </h6>
               </div>
             </Col>
           </Row>

@@ -74,7 +74,7 @@ const products = [
 
   {
     id: "05",
-    title: "Cidelicia",
+    title: "Cidelícia",
     price: 24.0,
     image01: product_05_image_01,
     image02: product_05_image_02,
