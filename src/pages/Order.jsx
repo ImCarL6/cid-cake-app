@@ -1,10 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import {
-  Container,
-  Row,
-  Col
-} from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { useLocation } from "react-router-dom";
@@ -22,6 +18,7 @@ const Order = () => {
 
   const location = useLocation();
   const orderInfo = location.state && location.state.orderInfo;
+  const [shippingInfo, paymentInfo] = orderInfo;
 
   if (!orderInfo) {
     return (
@@ -39,8 +36,6 @@ const Order = () => {
       </Helmet>
     );
   }
-
-  const [shippingInfo, paymentInfo] = orderInfo;
 
   return (
     <Helmet title="Pedido">
@@ -133,29 +128,55 @@ const ShippingInfoView = ({ shippingInfo }) => (
   </>
 );
 
-const PaymentInfoView = ({ paymentInfo }) => (
-  <>
-    <p>
-      <strong>Número do Cartão:</strong> **** **** ****{" "}
-      {paymentInfo[0].creditCard.slice(-4)}
-    </p>
-    <p>
-      <strong>Validade:</strong> {paymentInfo[0].expirationDate}
-    </p>
-    <p>
-      <strong>CVV:</strong>***
-    </p>
-    <p>
-      <strong>CPF:</strong> {paymentInfo[0].cpf}
-    </p>
-    <p>
-      <strong>Nome Completo:</strong> {paymentInfo[0].name}
-    </p>
-    <p>
-      <strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}
-    </p>
-  </>
-);
+const PaymentInfoView = ({ paymentInfo }) => {
+  if (paymentInfo[0].type === "card") {
+    return (
+      <>
+        <p>
+          <strong>Número do Cartão:</strong> **** **** ****{" "}
+          {paymentInfo[0].creditCard.slice(-4)}
+        </p>
+        <p>
+          <strong>Validade:</strong> {paymentInfo[0].expirationDate}
+        </p>
+        <p>
+          <strong>CVV:</strong>***
+        </p>
+        <p>
+          <strong>CPF:</strong> {paymentInfo[0].cpf}
+        </p>
+        <p>
+          <strong>Nome Completo:</strong> {paymentInfo[0].name}
+        </p>
+        <p>
+          <strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}
+        </p>
+      </>
+    );
+  } else if (paymentInfo[0].type === "pix") {
+    return (
+      <>
+        <div className="mt-3">
+          <h6>Pix</h6>
+          <p>Pagamento em análise</p>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="mt-3">
+          <h6>Dinheiro</h6>
+          {paymentInfo[0]?.moneyChange === null ? (
+            <p>Sem troco</p>
+          ) : (
+            <p>Troco para: {paymentInfo[0]?.moneyChange}</p>
+          )}
+        </div>
+      </>
+    );
+  }
+};
 
 const Tr = (props) => {
   const { image01, title, price, quantity, selectedOptions } = props.item;
@@ -177,6 +198,6 @@ const Tr = (props) => {
       </td>
     </tr>
   );
-};  
+};
 
 export default Order;

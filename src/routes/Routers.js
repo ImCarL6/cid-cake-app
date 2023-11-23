@@ -10,6 +10,9 @@ import Contact from "../pages/Contact";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import Payment from "../pages/Payment";
+import PaymentCard from "../pages/PaymentCard";
+import PaymentPix from "../pages/PaymentPix";
+import PaymentMoney from "../pages/PaymentMoney";
 import Review from "../pages/Review";
 import Order from "../pages/Order";
 import User from "../pages/User";
@@ -31,6 +34,9 @@ const Routers = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/payment" element={<Payment />} />
+      <Route path="/payment/card" element={<PaymentCard />} />
+      <Route path="/payment/money" element={<PaymentMoney />} />
+      <Route path="/payment/pix" element={<PaymentPix />} />
       <Route path="/review" element={<Review />} />
       <Route path="/order" element={<Order />} />
       <Route path="/user" element={<User />} />

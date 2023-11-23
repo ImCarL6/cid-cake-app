@@ -10,6 +10,9 @@ import categoryImg05 from "../../../assets/images/category-05.png";
 import categoryImg06 from "../../../assets/images/category-06.png";
 import categoryImg07 from "../../../assets/images/category-07.png";
 import categoryImg08 from "../../../assets/images/category-08.png";
+import pix from "../../../assets/images/pix.png"
+import money from "../../../assets/images/money.png"
+import card from "../../../assets/images/credit-card.png"
 
 import "../../../styles/category.css";
 
@@ -51,9 +54,25 @@ const categoryDataOrder = [
   },
 ];
 
+const categoryDataPayment = [
+  {
+    display: "Pix",
+    imgUrl: pix,
+  },
+  {
+    display: "Cartão",
+    imgUrl: card,
+  },
+  {
+    display: "Dinheiro",
+    imgUrl: money,
+  }
+];
+
 const Category = (type) => {
   let arr;
   if (type.icon === "home") arr = categoryDataHome;
+  else if (type.icon === "payment") arr = categoryDataPayment
   else arr = categoryDataOrder;
 
   const navigate = useNavigate();
@@ -63,6 +82,14 @@ const Category = (type) => {
       navigate("/confirm");
     } else if (display === "Cancelar") {
       navigate("/cancel");
+    } else if (display === "Pix") {
+      navigate("/payment/pix", { state: { shippingInfo: type.shippingInfo } });
+    }
+    else if (display === "Cartão") {
+      navigate("/payment/card", { state: { shippingInfo: type.shippingInfo } });
+    }
+    else if (display === "Dinheiro") {
+      navigate("/payment/money", { state: { shippingInfo: type.shippingInfo } });
     }
   };
 

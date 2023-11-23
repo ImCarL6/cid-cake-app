@@ -1,6 +1,14 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Container, Row, Col, Button, FormGroup, Label, Input } from "reactstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Button,
+  FormGroup,
+  Label,
+  Input,
+} from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,12 +16,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/checkout.css";
 
 const Review = () => {
-  const orderInfo = []
+  const orderInfo = [];
   const navigate = useNavigate();
 
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const totalAmount = cartTotalAmount;
-  const shippingCost = 'Grátis';
+  const shippingCost = "Grátis";
 
   const location = useLocation();
   const initialShippingInfo = location.state && location.state.shippingInfo;
@@ -50,7 +58,6 @@ const Review = () => {
     orderInfo.push(paymentInfo);
 
     navigate("/order", { state: { orderInfo } });
-
   };
 
   return (
@@ -65,36 +72,69 @@ const Review = () => {
                 <EditShippingForm
                   shippingInfo={shippingInfo}
                   setShippingInfo={setShippingInfo}
-                  onSave={() => { handleSaveShipping(); setShowProceedButton(true); }}
+                  onSave={() => {
+                    handleSaveShipping();
+                    setShowProceedButton(true);
+                  }}
                 />
               ) : (
                 <ShippingInfoView shippingInfo={shippingInfo} />
               )}
               {!isEditingShipping && (
-                <Button onClick={handleEditShipping} color="primary" className="addTOCart__btn">
+                <Button
+                  onClick={handleEditShipping}
+                  color="primary"
+                  className="addTOCart__btn"
+                >
                   Editar Endereço
                 </Button>
               )}
 
               <h6 className="mt-4">Informações de Pagamento</h6>
-              {isEditingPayment ? (
-                <EditPaymentForm
-                  paymentInfo={paymentInfo}
-                  setPaymentInfo={setPaymentInfo}
-                  onSave={() => { handleSavePayment(); setShowProceedButton(true); }}
-                />
+              {paymentInfo[0]?.type === "card" ? (
+                isEditingPayment ? (
+                  <EditPaymentForm
+                    paymentInfo={paymentInfo}
+                    setPaymentInfo={setPaymentInfo}
+                    onSave={() => {
+                      handleSavePayment();
+                      setShowProceedButton(true);
+                    }}
+                  />
+                ) : (
+                  <PaymentInfoView paymentInfo={paymentInfo} />
+                )
+              ) : paymentInfo[0]?.type === "money" ? (
+                <div className="mt-3">
+                  <h6>Dinheiro</h6>
+                  {paymentInfo[0]?.moneyChange === null ? (
+                    <p>Sem troco</p>
+                  ) : (
+                    <p>Troco para: {paymentInfo[0]?.moneyChange}</p>
+                  )}
+                </div>
               ) : (
-                <PaymentInfoView paymentInfo={paymentInfo} />
+                <div className="mt-3">
+                  <h6>Pix</h6>
+                  <p>Pagamento em análise</p>
+                </div>
               )}
-              {!isEditingPayment && (
-                <Button onClick={handleEditPayment} color="primary" className="addTOCart__btn">
+              {!isEditingPayment && paymentInfo[0]?.type === "card" && (
+                <Button
+                  onClick={handleEditPayment}
+                  color="primary"
+                  className="addTOCart__btn"
+                >
                   Editar Pagamento
                 </Button>
               )}
 
               {!isEditingShipping && !isEditingPayment && showProceedButton && (
                 <div className="d-flex mt-5">
-                  <Button onClick={submitHandler} style={{ backgroundColor: '#F875AA', color: 'black' }}>
+                  <Button
+                    onClick={submitHandler}
+                    style={{ backgroundColor: "#F875AA", color: "black" }}
+                  >
                     Finalizar Pedido
                   </Button>
                 </div>
@@ -125,28 +165,59 @@ const Review = () => {
 
 const ShippingInfoView = ({ shippingInfo }) => (
   <>
-    <p><strong>Nome:</strong> {shippingInfo[0].name}</p>
-    <p><strong>Telefone:</strong> {shippingInfo[0].phone}</p>
-    <p><strong>Rua:</strong> {shippingInfo[0].street}</p>
-    <p><strong>Numero:</strong> {shippingInfo[0].streetNumber}</p>
-    <p><strong>Cidade:</strong> {shippingInfo[0].city}</p>
-    <p><strong>CEP:</strong> {shippingInfo[0].postalCode}</p>
+    <p>
+      <strong>Nome:</strong> {shippingInfo[0].name}
+    </p>
+    <p>
+      <strong>Telefone:</strong> {shippingInfo[0].phone}
+    </p>
+    <p>
+      <strong>Rua:</strong> {shippingInfo[0].street}
+    </p>
+    <p>
+      <strong>Numero:</strong> {shippingInfo[0].streetNumber}
+    </p>
+    <p>
+      <strong>Cidade:</strong> {shippingInfo[0].city}
+    </p>
+    <p>
+      <strong>CEP:</strong> {shippingInfo[0].postalCode}
+    </p>
   </>
 );
 
-const PaymentInfoView = ({ paymentInfo }) => (
-  <>
-    <p><strong>Número do Cartão:</strong> {paymentInfo[0].creditCard}</p>
-    <p><strong>Validade:</strong> {paymentInfo[0].expirationDate}</p>
-    <p><strong>CVV:</strong> {paymentInfo[0].cvv}</p>
-    <p><strong>CPF:</strong> {paymentInfo[0].cpf}</p>
-    <p><strong>Nome Completo:</strong> {paymentInfo[0].name}</p>
-    <p><strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}</p>
-  </>
-);
+const PaymentInfoView = ({ paymentInfo }) => {
+  if (paymentInfo[0].type === "card") {
+    return (
+      <>
+        <p>
+          <strong>Número do Cartão:</strong> **** **** ****{" "}
+          {paymentInfo[0].creditCard.slice(-4)}
+        </p>
+        <p>
+          <strong>Validade:</strong> {paymentInfo[0].expirationDate}
+        </p>
+        <p>
+          <strong>CVV:</strong>***
+        </p>
+        <p>
+          <strong>CPF:</strong> {paymentInfo[0].cpf}
+        </p>
+        <p>
+          <strong>Nome Completo:</strong> {paymentInfo[0].name}
+        </p>
+        <p>
+          <strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}
+        </p>
+      </>
+    );
+  }
+};
 
 const EditShippingForm = ({ shippingInfo, setShippingInfo, onSave }) => {
-  const [editedShippingInfo, setEditedShippingInfo] = useState({ ...shippingInfo[0] });
+  const [editedShippingInfo, setEditedShippingInfo] = useState({
+    ...shippingInfo[0],
+  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -219,7 +290,13 @@ const EditShippingForm = ({ shippingInfo, setShippingInfo, onSave }) => {
         />
       </FormGroup>
 
-      <Button onClick={() => { setShippingInfo([editedShippingInfo]); onSave(); }} color="success">
+      <Button
+        onClick={() => {
+          setShippingInfo([editedShippingInfo]);
+          onSave();
+        }}
+        color="success"
+      >
         Salvar
       </Button>
     </div>
@@ -227,7 +304,9 @@ const EditShippingForm = ({ shippingInfo, setShippingInfo, onSave }) => {
 };
 
 const EditPaymentForm = ({ paymentInfo, setPaymentInfo, onSave }) => {
-  const [editedPaymentInfo, setEditedPaymentInfo] = useState({ ...paymentInfo[0] });
+  const [editedPaymentInfo, setEditedPaymentInfo] = useState({
+    ...paymentInfo[0],
+  });
 
   const formatExpirationDate = (input) => {
     const numericValue = input.replace(/\D/g, "");
@@ -257,8 +336,6 @@ const EditPaymentForm = ({ paymentInfo, setPaymentInfo, onSave }) => {
         [name]: value,
       }));
     }
-
-
   };
 
   return (
@@ -324,7 +401,13 @@ const EditPaymentForm = ({ paymentInfo, setPaymentInfo, onSave }) => {
         />
       </FormGroup>
 
-      <Button onClick={() => { setPaymentInfo([editedPaymentInfo]); onSave(); }} color="success">
+      <Button
+        onClick={() => {
+          setPaymentInfo([editedPaymentInfo]);
+          onSave();
+        }}
+        color="success"
+      >
         Salvar
       </Button>
     </div>
