@@ -75,7 +75,6 @@ const Home = () => {
           );
 
           if (response.status === 200) {
-            console.log('Login verified!', response.data.verified)
             const userName = Cookies.get("userName");
             dispatch(setUser({username: userUsername ,name: userName}));
           }

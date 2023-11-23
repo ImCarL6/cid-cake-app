@@ -9,7 +9,7 @@ import axios from "axios";
 import "../styles/home.css";
 
 const ResetPassword = () => {
-  const loginEmailRef = useRef();
+  const resetEmailRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -19,12 +19,13 @@ const ResetPassword = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    
 
     try {
       const response = await axios.post(
         "https://z0vlzp3ki1.execute-api.sa-east-1.amazonaws.com/dev/token",
         {
-          username: loginEmailRef.current.value,
+          username: resetEmailRef.current.value,
         }
       );
 
@@ -37,7 +38,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <Helmet title="ResetPassword">
+    <Helmet title="Restaurar a Senha">
       <CommonSection title="Resetar a Senha" />
       <section>
         <Container>
@@ -58,7 +59,7 @@ const ResetPassword = () => {
                       type="email"
                       placeholder="Email"
                       required
-                      ref={loginEmailRef}
+                      ref={resetEmailRef}
                     />
                   </div>
                   <button type="submit" className="addTOCart__btn">

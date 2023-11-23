@@ -20,9 +20,6 @@ const Cancel = () => {
   };
 
   const handleSubmit = () => {
-    console.log("Selected Reason:", selectedReason);
-    console.log("Other Reason:", otherReason);
-    // Implement your submit logic here
   };
 
   return (

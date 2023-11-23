@@ -35,7 +35,6 @@ const Checkout = () => {
     };
 
     shippingInfo.push(userShippingAddress);
-    console.log(shippingInfo);
 
     navigate("/payment", { state: { shippingInfo } });
   };

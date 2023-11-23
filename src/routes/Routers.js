@@ -16,6 +16,7 @@ import User from "../pages/User";
 import Confirm from "../pages/Confirm";
 import Cancel from "../pages/Cancel";
 import ResetPassword from "../pages/ResetPassword";
+import ResetPasswordForm from "../pages/ResetPasswordForm";
 
 const Routers = () => {
   return (
@@ -36,6 +37,7 @@ const Routers = () => {
       <Route path="/confirm" element={<Confirm />} />
       <Route path="/cancel" element={<Cancel />} />
       <Route path="/reset-password" element={<ResetPassword />} />
+      <Route path="/reset-password/form" element={<ResetPasswordForm />} />
     </Routes>
   );
 };

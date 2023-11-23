@@ -9,8 +9,6 @@ import { cartActions } from "../../../store/shopping-cart/cartSlice";
 const CartItem = ({ item, selectedOptions }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
 
-  console.log(selectedOptions);
-
   const dispatch = useDispatch();
 
   const incrementItem = () => {

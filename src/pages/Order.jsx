@@ -20,8 +20,6 @@ const Order = () => {
   const totalAmount = cartTotalAmount;
   const shippingCost = "Grátis";
 
-  console.log(cartItems)
-
   const location = useLocation();
   const orderInfo = location.state && location.state.orderInfo;
 
