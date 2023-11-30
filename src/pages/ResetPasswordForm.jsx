@@ -45,7 +45,18 @@ const ResetPasswordForm = () => {
         setResetPasswordStatus("success");
       }
     } catch (error) {
-      setResetPasswordStatus("error");
+      console.log(error)
+      if (error.response.data.message === "Token has expired") {
+        setResetPasswordStatus("expired");
+      } else if ( error.response.data.message === "Incorrect request body" ) {
+        setResetPasswordStatus("error");
+      } else if ( error.response.data.message === "email not found" ) {
+        setResetPasswordStatus("email");
+      } else if ( error.response.data.message === "Token is not valid" ) {
+        setResetPasswordStatus("invalid");
+      } else {
+        setResetPasswordStatus("error");
+      }
     }
   };
 
@@ -73,7 +84,19 @@ const ResetPasswordForm = () => {
                 </div>
               ) : resetPasswordStatus === "error" ? (
                 <div className="confirmation__message error">
-                  <p>Email inválido.</p>
+                  <p>Tente novamente.</p>
+                </div>
+              ) : resetPasswordStatus === "expired" ? (
+                <div className="confirmation__message error">
+                  <p>Token expirado, por favor refaça a solicitação.</p>
+                </div>
+              ) : resetPasswordStatus === "email" ? (
+                <div className="confirmation__message error">
+                  <p>Email incorreto.</p>
+                </div>
+              ) : resetPasswordStatus === "invalid" ? (
+                <div className="confirmation__message error">
+                  <p>Token invalido, por favor verifique se o token está correto.</p>
                 </div>
               ) : (
                 <form className="form mb-5" onSubmit={submitHandler}>

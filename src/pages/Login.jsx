@@ -3,7 +3,7 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { setUser } from "../store/user/userSlice";
 import { Container, Row, Col } from "reactstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -15,6 +15,8 @@ const Login = () => {
   const loginPasswordRef = useRef();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+
 
   const location = useLocation();
   const loginEmail = location.state && location.state.username;
@@ -50,8 +52,15 @@ const Login = () => {
         Cookies.set("userLogin", response.data.user.username);
         Cookies.set("userName", response.data.user.name);
         Cookies.set("userAuth", response.data.token);
+
+        setTimeout(() => {
+          navigate('/user')
+        }, 1500);
       }
     } catch (error) {
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       setLoginStatus("error");
     }
   };
@@ -93,11 +102,14 @@ const Login = () => {
                     Login
                   </button>
                   <div className="mt-3 ">
-                  <Link to="/reset-password">Esqueceu sua senha?</Link>
+                    <Link to="/reset-password">Esqueceu sua senha?</Link>
                   </div>
                 </form>
               )}
+              <button className="addTOCart__btn"> 
               <Link to="/register">Criar conta</Link>
+              </button>
+              
             </Col>
           </Row>
         </Container>

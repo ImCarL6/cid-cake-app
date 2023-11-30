@@ -76,9 +76,10 @@ const Home = () => {
 
           if (response.status === 200) {
             const userName = Cookies.get("userName");
-            dispatch(setUser({username: userUsername ,name: userName}));
+            dispatch(setUser({username: userUsername, name: userName}));
           }
         } catch (error) {
+          dispatch(setUser());
           console.error("User verification failed: log again", error);
         }
       }

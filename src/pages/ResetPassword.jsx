@@ -1,19 +1,13 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useState } from "react";
 import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
-import { useLocation } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import axios from "axios";
 
 import "../styles/home.css";
 
 const ResetPassword = () => {
   const resetEmailRef = useRef();
-
-  const dispatch = useDispatch();
-
-  const location = useLocation();
 
   const [resetPasswordStatus, setResetPasswordStatus] = useState(null);
 
