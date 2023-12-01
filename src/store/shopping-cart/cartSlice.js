@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import isEqual from 'lodash/isEqual';
+import isEqual from "lodash/isEqual";
 
 const items =
   localStorage.getItem("cartItems") !== null
@@ -71,16 +71,20 @@ const cartSlice = createSlice({
     },
 
     removeItem(state, action) {
-      const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
+      const { id, selectedOptions } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id && isEqual(item.selectedOptions, selectedOptions));
       state.totalQuantity--;
 
-      if (existingItem.quantity === 1) {
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
-      } else {
+      if (existingItem.quantity > 1) {
         existingItem.quantity--;
         existingItem.totalPrice =
           Number(existingItem.totalPrice) - Number(existingItem.price);
+      } else {
+        const existingItemIndex = state.cartItems.findIndex(
+          (item) =>
+            item.id === id && isEqual(item.selectedOptions, selectedOptions)
+        );
+        state.cartItems.splice(existingItemIndex, 1);
       }
 
       state.totalAmount = state.cartItems.reduce(
@@ -96,18 +100,20 @@ const cartSlice = createSlice({
     },
 
     deleteItem(state, action) {
-      const id = action.payload;
-      const existingItem = state.cartItems.find((item) => item.id === id);
+      const { id, selectedOptions } = action.payload;
+      const existingItemIndex = state.cartItems.findIndex(
+        (item) =>
+          item.id === id && isEqual(item.selectedOptions, selectedOptions)
+      );
 
-      if (existingItem) {
-        state.cartItems = state.cartItems.filter((item) => item.id !== id);
-        state.totalQuantity = state.totalQuantity - existingItem.quantity;
+      if (existingItemIndex !== -1) {
+        const existingItem = state.cartItems[existingItemIndex];
+        state.totalQuantity -= existingItem.quantity;
+        state.totalAmount -= existingItem.totalPrice;
+
+        state.cartItems.splice(existingItemIndex, 1);
       }
 
-      state.totalAmount = state.cartItems.reduce(
-        (total, item) => total + Number(item.price) * Number(item.quantity),
-        0
-      );
       setItemFunc(
         state.cartItems.map((item) => item),
         state.totalAmount,
@@ -133,7 +139,6 @@ const cartSlice = createSlice({
           (total, option) => total + option.price,
           0
         );
-        console.log(JSON.stringify(state.cartItems))
       }
     },
   },

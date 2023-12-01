@@ -11,7 +11,6 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
-  console.log(cartItems)
   return (
     <Helmet title="Carrinho">
       <CommonSection title="Seu Carrinho" />

@@ -30,18 +30,12 @@ const CartItem = ({ item, selectedOptions }) => {
   };
 
   const decreaseItem = () => {
-    dispatch(cartActions.removeItem(id));
+    dispatch(cartActions.removeItem({ id, selectedOptions }));
   };
 
   const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+    dispatch(cartActions.deleteItem({ id, selectedOptions }));
   };
-
-  const availableOptions = [
-    { name: "Café preto", price: 2 },
-    { name: "Cappuccino", price: 3 },
-    { name: "Suco natural", price: 4 },
-  ];
 
   return (
     <ListGroupItem className="border-0 cart__item">
