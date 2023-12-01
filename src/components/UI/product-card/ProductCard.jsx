@@ -4,31 +4,11 @@ import "../../../styles/product-card.css";
 
 import { Link } from "react-router-dom";
 
-import { useDispatch } from "react-redux";
-import { cartActions } from "../../../store/shopping-cart/cartSlice";
-import Popup from "../cart/Popup.jsx";
+import Popup from "../cart/Popup.jsx";  
 
 const ProductCard = (props) => {
   const [showPopup, setShowPopup] = useState(false);
   const { id, title, image01, price } = props.item;
-  const dispatch = useDispatch();
-
-  const addToCart = () => {
-    dispatch(
-      cartActions.addItem({
-        id,
-        title,
-        image01,
-        price,
-      })
-    );
-
-    setShowPopup(true);
-
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 1250);
-  };
 
   return (
     <div className="product__item">
@@ -45,8 +25,8 @@ const ProductCard = (props) => {
         <div className="product__details d-flex flex-column align-items-center justify-content-end">
           <div className="product__info d-flex align-items-center justify-content-between ">
             <span className="product__price">R${price}</span>
-            <button className="addTOCart__btn" onClick={addToCart}>
-              + Carrinho
+            <button className="addTOCart__btn">
+              <Link to={`/foods/${id}`}>+ Carrinho</Link>
             </button>
           </div>
           <Popup

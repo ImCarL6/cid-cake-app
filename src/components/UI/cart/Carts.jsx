@@ -26,7 +26,7 @@ const Carts = () => {
       <ListGroup className="cart">
         <div className="cart__close">
           <span onClick={toggleCart}>
-            <i class="ri-close-fill"></i>
+            <i className="ri-close-fill"></i>
           </span>
         </div>
 
@@ -35,7 +35,7 @@ const Carts = () => {
             <h6 className="text-center mt-5">Nenhum produto adicionado</h6>
           ) : (
             cartProducts.map((item, index) => (
-              <CartItem item={item} key={index} />
+              <CartItem item={item} key={index} selectedOptions={item.selectedOptions} />
             ))
           )}
         </div>

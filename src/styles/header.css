@@ -11,6 +11,7 @@
   width: calc(100% - 70%);
   object-fit: contain;
   margin-top: -20px;
+  cursor: pointer;
 }
 
 .logo h5 {
@@ -74,7 +75,7 @@
   top: 0;
   left: 0;
   background: #fff;
-  z-index: 99999;
+  z-index: 9998;
   box-shadow: 5px 5px 15px -5px #fde4e4;
 }
 
@@ -128,6 +129,36 @@
 
   .show__menu {
     display: block;
+  }
+
+  .userIconWrapper {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .userDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    z-index: 1;
+  }
+  
+  .userDropdown a,
+  .userDropdown button {
+    display: block;
+    padding: 8px;
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .userDropdown a:hover,
+  .userDropdown button:hover {
+    background-color: #f4f4f4;
   }
 }
 

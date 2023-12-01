@@ -1,27 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
-import { Container, Row, Col, Button, FormGroup, Label, Input } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import Helmet from "../components/Helmet/Helmet";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-import mockgps from '../assets/images/mockgps.png'
-import Cart from "./Cart";
+import mockgps from "../assets/images/mockgps.png";
+import Category from "../components/UI/category/Category";
 
 import "../styles/checkout.css";
 
 const Order = () => {
-
-
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = cartTotalAmount;
-  const shippingCost = 'Grátis';
+  const shippingCost = "Grátis";
 
   const location = useLocation();
   const orderInfo = location.state && location.state.orderInfo;
+  const [shippingInfo, paymentInfo] = orderInfo;
 
-  if (!orderInfo){
+  if (!orderInfo) {
     return (
       <Helmet title="Pedido">
         <CommonSection title="Pedido" />
@@ -38,8 +37,6 @@ const Order = () => {
     );
   }
 
-  const [shippingInfo, paymentInfo] = orderInfo;
-
   return (
     <Helmet title="Pedido">
       <CommonSection title="Pedido" />
@@ -48,10 +45,14 @@ const Order = () => {
           <Row>
             <Col>
               <h2 className="mb-4">Pedido Confirmado!</h2>
-              <img src={mockgps} alt="Mock GPS" style={{ width: '100%', marginBottom: '60px' }} />
+              <img
+                src={mockgps}
+                alt="Mock GPS"
+                style={{ width: "100%", marginBottom: "60px" }}
+              />
             </Col>
             <Row>
-            <Col lg="12">
+              <Col lg="12">
                 <table className="table table-bordered">
                   <thead>
                     <tr>
@@ -59,6 +60,7 @@ const Order = () => {
                       <th>Produto</th>
                       <th>Preço</th>
                       <th>Quantidade</th>
+                      <th>Adicionais</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -67,10 +69,9 @@ const Order = () => {
                     ))}
                   </tbody>
                 </table>
-              <div className="mt-4">
-              </div>
-            </Col>
-          </Row>
+                <div className="mt-4"></div>
+              </Col>
+            </Row>
             <Col lg="8" md="6" className="review__section">
               <h6 className="mb-4">Endereço de Entrega</h6>
               <ShippingInfoView shippingInfo={shippingInfo} />
@@ -93,6 +94,10 @@ const Order = () => {
                 </div>
               </div>
             </Col>
+
+            <Col lg="8" md="6" className="mt-5 pt-0">
+              <Category />
+            </Col>
           </Row>
         </Container>
       </section>
@@ -102,29 +107,79 @@ const Order = () => {
 
 const ShippingInfoView = ({ shippingInfo }) => (
   <>
-    <p><strong>Nome:</strong> {shippingInfo[0].name}</p>
-    <p><strong>Telefone:</strong> {shippingInfo[0].phone}</p>
-    <p><strong>Rua:</strong> {shippingInfo[0].street}</p>
-    <p><strong>Numero:</strong> {shippingInfo[0].streetNumber}</p>
-    <p><strong>Cidade:</strong> {shippingInfo[0].city}</p>
-    <p><strong>CEP:</strong> {shippingInfo[0].postalCode}</p>
+    <p>
+      <strong>Nome:</strong> {shippingInfo[0].name}
+    </p>
+    <p>
+      <strong>Telefone:</strong> {shippingInfo[0].phone}
+    </p>
+    <p>
+      <strong>Rua:</strong> {shippingInfo[0].street}
+    </p>
+    <p>
+      <strong>Numero:</strong> {shippingInfo[0].streetNumber}
+    </p>
+    <p>
+      <strong>Cidade:</strong> {shippingInfo[0].city}
+    </p>
+    <p>
+      <strong>CEP:</strong> {shippingInfo[0].postalCode}
+    </p>
   </>
 );
 
-const PaymentInfoView = ({ paymentInfo }) => (
-
-  <>
-    <p><strong>Número do Cartão:</strong> **** **** **** {paymentInfo[0].creditCard.slice(-4)}</p>
-    <p><strong>Validade:</strong> {paymentInfo[0].expirationDate}</p>
-    <p><strong>CVV:</strong>***</p>
-    <p><strong>CPF:</strong> {paymentInfo[0].cpf}</p>
-    <p><strong>Nome Completo:</strong> {paymentInfo[0].name}</p>
-    <p><strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}</p>
-  </>
-);
+const PaymentInfoView = ({ paymentInfo }) => {
+  if (paymentInfo[0].type === "card") {
+    return (
+      <>
+        <p>
+          <strong>Número do Cartão:</strong> **** **** ****{" "}
+          {paymentInfo[0].creditCard.slice(-4)}
+        </p>
+        <p>
+          <strong>Validade:</strong> {paymentInfo[0].expirationDate}
+        </p>
+        <p>
+          <strong>CVV:</strong>***
+        </p>
+        <p>
+          <strong>CPF:</strong> {paymentInfo[0].cpf}
+        </p>
+        <p>
+          <strong>Nome Completo:</strong> {paymentInfo[0].name}
+        </p>
+        <p>
+          <strong>Endereço de Cobrança:</strong> {paymentInfo[0].address}
+        </p>
+      </>
+    );
+  } else if (paymentInfo[0].type === "pix") {
+    return (
+      <>
+        <div className="mt-3">
+          <h6>Pix</h6>
+          <p>Pagamento em análise</p>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="mt-3">
+          <h6>Dinheiro</h6>
+          {paymentInfo[0]?.moneyChange === null ? (
+            <p>Sem troco</p>
+          ) : (
+            <p>Troco para: {paymentInfo[0]?.moneyChange}</p>
+          )}
+        </div>
+      </>
+    );
+  }
+};
 
 const Tr = (props) => {
-  const { image01, title, price, quantity } = props.item;
+  const { image01, title, price, quantity, selectedOptions } = props.item;
 
   return (
     <tr>
@@ -134,6 +189,15 @@ const Tr = (props) => {
       <td className="text-center">{title}</td>
       <td className="text-center">R${price}</td>
       <td className="text-center">{quantity}</td>
+      <td className="text-center">
+        <ul>
+          {selectedOptions.map((option, index) => (
+            <li key={index}>
+              {option.name} (+R${option.price})
+            </li>
+          ))}
+        </ul>
+      </td>
     </tr>
   );
 };

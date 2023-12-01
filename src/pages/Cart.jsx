@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const cartItems = useSelector((state) => state.cart.cartItems);
   const totalAmount = useSelector((state) => state.cart.totalAmount);
+  console.log(cartItems)
   return (
     <Helmet title="Carrinho">
       <CommonSection title="Seu Carrinho" />
@@ -77,7 +78,7 @@ const Tr = (props) => {
       <td className="text-center">R${price}</td>
       <td className="text-center">{quantity}</td>
       <td className="text-center cart__item-del">
-        <i class="ri-delete-bin-line" onClick={deleteItem}></i>
+        <i className="ri-delete-bin-line" onClick={deleteItem}></i>
       </td>
     </tr>
   );

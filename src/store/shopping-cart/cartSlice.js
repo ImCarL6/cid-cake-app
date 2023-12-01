@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import isEqual from 'lodash/isEqual';
 
 const items =
   localStorage.getItem("cartItems") !== null
@@ -32,17 +33,16 @@ const cartSlice = createSlice({
   initialState,
 
   reducers: {
-    // =========== add item ============
     addItem(state, action) {
       const newItem = action.payload;
       const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
+        (item) =>
+          item.id === newItem.id &&
+          isEqual(item.selectedOptions, newItem.selectedOptions)
       );
       state.totalQuantity++;
 
       if (!existingItem) {
-        // ===== note: if you use just redux you should not mute state array instead of clone the state array, but if you use redux toolkit that will not a problem because redux toolkit clone the array behind the scene
-
         state.cartItems.push({
           id: newItem.id,
           title: newItem.title,
@@ -50,6 +50,7 @@ const cartSlice = createSlice({
           price: newItem.price,
           quantity: 1,
           totalPrice: newItem.price,
+          selectedOptions: newItem.selectedOptions,
         });
       } else {
         existingItem.quantity++;
@@ -59,7 +60,6 @@ const cartSlice = createSlice({
 
       state.totalAmount = state.cartItems.reduce(
         (total, item) => total + Number(item.price) * Number(item.quantity),
-
         0
       );
 
@@ -69,8 +69,6 @@ const cartSlice = createSlice({
         state.totalQuantity
       );
     },
-
-    // ========= remove item ========
 
     removeItem(state, action) {
       const id = action.payload;
@@ -97,8 +95,6 @@ const cartSlice = createSlice({
       );
     },
 
-    //============ delete item ===========
-
     deleteItem(state, action) {
       const id = action.payload;
       const existingItem = state.cartItems.find((item) => item.id === id);
@@ -117,6 +113,28 @@ const cartSlice = createSlice({
         state.totalAmount,
         state.totalQuantity
       );
+    },
+
+    modifyOptions(state, action) {
+      const { id, options } = action.payload;
+      const existingItem = state.cartItems.find((item) => item.id === id);
+
+      if (existingItem && Array.isArray(options)) {
+        const updatedOptions = existingItem.selectedOptions
+          ? [...existingItem.selectedOptions, ...options]
+          : [...options];
+
+        existingItem.selectedOptions = updatedOptions;
+        existingItem.totalPrice += options.reduce(
+          (total, option) => total + option.price,
+          0
+        );
+        state.totalAmount += options.reduce(
+          (total, option) => total + option.price,
+          0
+        );
+        console.log(JSON.stringify(state.cartItems))
+      }
     },
   },
 });

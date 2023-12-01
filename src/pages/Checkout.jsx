@@ -1,44 +1,56 @@
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import { Container, Row, Col } from "reactstrap";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Container, Row, Col, Button } from "reactstrap";
 import CommonSection from "../components/UI/common-section/CommonSection";
+import Cookies from "js-cookie";
 import Helmet from "../components/Helmet/Helmet";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { setUser } from "../store/user/userSlice";
+import { Link } from "react-router-dom";
+
+import AddressManager from "./Addresses";
 
 import "../styles/checkout.css";
 
 const Checkout = () => {
-  const [enterName, setEnterName] = useState("");
-  const [enterNumber, setEnterNumber] = useState("");
-  const [enterStreet, setEnterStreet] = useState("");
-  const [enterStreetNumber, setEnterStreetNumber] = useState("");
-  const [enterCity, setEnterCity] = useState("");
-  const [postalCode, setPostalCode] = useState("");
-
-  const shippingInfo = [];
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const dispatch = useDispatch();
   const cartTotalAmount = useSelector((state) => state.cart.totalAmount);
-  const shippingCost = 'Grátis';
+  const shippingCost = "Grátis";
 
   const totalAmount = cartTotalAmount;
 
-  const navigate = useNavigate();
+  const obj = { checkout: true };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
-    const userShippingAddress = {
-      name: enterName,
-      phone: enterNumber,
-      street: enterStreet,
-      streetNumber: enterStreetNumber,
-      city: enterCity,
-      postalCode: postalCode,
+  const userUsername = Cookies.get("userLogin");
+  const userToken = Cookies.get("userAuth");
+
+  useEffect(() => {
+    const checkAuthentication = async () => {
+      if (userUsername && userToken) {
+        try {
+          const response = await axios.post(
+            "https://z0vlzp3ki1.execute-api.sa-east-1.amazonaws.com/dev/verify",
+            {
+              username: userUsername,
+              token: userToken,
+            }
+          );
+
+          if (response.status === 200) {
+            setIsAuthenticated(true);
+          }
+        } catch (error) {
+          console.error("User verification failed: log again", error);
+          setIsAuthenticated(false);
+        }
+      } else {
+        setIsAuthenticated(false);
+      }
     };
 
-    shippingInfo.push(userShippingAddress);
-    console.log(shippingInfo);
-
-    navigate("/payment", { state: { shippingInfo } });
-  };
+    checkAuthentication();
+  }, [userUsername, userToken]);
 
   return (
     <Helmet title="Checkout">
@@ -46,62 +58,27 @@ const Checkout = () => {
       <section>
         <Container>
           <Row>
-            <Col lg="8" md="6">
-              <h6 className="mb-4">Endereço</h6>
-              <form className="checkout__form" onSubmit={submitHandler}>
-                <div className="form__group">
-                  <input
-                    type="text"
-                    placeholder="Nome completo"
-                    required
-                    onChange={(e) => setEnterName(e.target.value)}
-                  />
+            {isAuthenticated === true ? (
+              <Col lg="8" md="6">
+                <AddressManager checkout={obj.checkout} />
+              </Col>
+            ) : (
+              <Col lg="8" md="6">
+                <div className="checkout__bill text-center">
+                  <p className="mb-4">
+                    Por favor, entre na sua conta ou registre-se para continuar.
+                  </p>
+                  <div className="d-flex justify-content-center gap-5 mt-3">
+                    <Button color="success">
+                      <Link to="/login">Login</Link>
+                    </Button>
+                    <Button className="ml-4" color="success">
+                      <Link to="/register">Registrar</Link>
+                    </Button>
+                  </div>
                 </div>
-                <div className="form__group">
-                  <input
-                    type="number"
-                    placeholder="Telefone"
-                    required
-                    onChange={(e) => setEnterNumber(e.target.value)}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="text"
-                    placeholder="Rua"
-                    required
-                    onChange={(e) => setEnterStreet(e.target.value)}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="number"
-                    placeholder="Numero"
-                    required
-                    onChange={(e) => setEnterStreetNumber(e.target.value)}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="text"
-                    placeholder="Cidade"
-                    required
-                    onChange={(e) => setEnterCity(e.target.value)}
-                  />
-                </div>
-                <div className="form__group">
-                  <input
-                    type="number"
-                    placeholder="CEP"
-                    required
-                    onChange={(e) => setPostalCode(e.target.value)}
-                  />
-                </div>
-                <button type="submit" className="addTOCart__btn">
-                <span onClick={submitHandler}>Prosseguir</span>
-                </button>
-              </form>
-            </Col>
+              </Col>
+            )}
 
             <Col lg="4" md="6">
               <div className="checkout__bill">

@@ -9,7 +9,7 @@ const Popup = ({ showPopup, item, onClose }) => {
     return (
       <div className="popup">
         <p>{`${item.title} Adicionado!`}</p>
-        <button onClick={onClose}>Close</button>
+        <button onClick={onClose}>Fechar</button>
       </div>
     );
   };
