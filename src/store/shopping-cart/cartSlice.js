@@ -139,7 +139,6 @@ const cartSlice = createSlice({
           (total, option) => total + option.price,
           0
         );
-        console.log(JSON.stringify(state.cartItems));
       }
     },
   },
