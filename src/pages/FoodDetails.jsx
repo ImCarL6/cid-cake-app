@@ -29,11 +29,11 @@ const FoodDetails = () => {
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 
-  const handleOptionChange = (option) => {
-    const index = selectedOptions.indexOf(option);
+  const handleOptionChange = (option, price) => {
+    const index = selectedOptions.findIndex((selectedOption) => selectedOption.name === option);
 
     if (index === -1) {
-      setSelectedOptions([...selectedOptions, option]);
+      setSelectedOptions([...selectedOptions, { name: option, price }]);
     } else {
       const updatedOptions = [...selectedOptions];
       updatedOptions.splice(index, 1);
@@ -45,19 +45,7 @@ const FoodDetails = () => {
     let totalPrice = price;
 
     selectedOptions.forEach((option) => {
-      switch (option) {
-        case "Café preto":
-          totalPrice += 2;
-          break;
-        case "Cappuccino":
-          totalPrice += 3;
-          break;
-        case "Suco Natural":
-          totalPrice += 4;
-          break;
-        default:
-          break;
-      }
+      totalPrice += option.price;
     });
 
     return totalPrice;
@@ -153,7 +141,7 @@ const FoodDetails = () => {
                     <label>
                       <input
                         type="checkbox"
-                        onChange={() => handleOptionChange("Café preto")}
+                        onChange={() => handleOptionChange("Café preto", 2)}
                       />
                       Café preto {'(+R$ 2)'}
                     </label>
@@ -162,7 +150,7 @@ const FoodDetails = () => {
                     <label>
                       <input
                         type="checkbox"
-                        onChange={() => handleOptionChange("Cappuccino")}
+                        onChange={() => handleOptionChange("Cappuccino", 3)}
                       />
                       Cappuccino {'(+R$ 3)'}
                     </label>
@@ -171,12 +159,11 @@ const FoodDetails = () => {
                     <label>
                       <input
                         type="checkbox"
-                        onChange={() => handleOptionChange("Suco Natural")}
+                        onChange={() => handleOptionChange("Suco Natural", 4)}
                       />
                       Suco Natural {'(+R$ 4)'}
                     </label>
                   </div>
-                  {/* Add more options as needed */}
                 </div>
 
                 <button onClick={addItem} className="addTOCart__btn">

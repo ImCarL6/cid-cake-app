@@ -1,15 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { ListGroupItem } from "reactstrap";
-
-import "../../../styles/cart-item.css";
-
 import { useDispatch } from "react-redux";
 import { cartActions } from "../../../store/shopping-cart/cartSlice";
+
+import "../../../styles/cart-item.css";
 
 const CartItem = ({ item, selectedOptions }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
 
   const dispatch = useDispatch();
+  const [modificationMode, setModificationMode] = useState(false);
+  const [modifiedOptions, setModifiedOptions] = useState([]);
+
+  const toggleModificationMode = () => {
+    setModificationMode(!modificationMode);
+    setModifiedOptions([...selectedOptions]); // Copy the selectedOptions to modifiedOptions
+  };
 
   const incrementItem = () => {
     dispatch(
@@ -31,6 +37,12 @@ const CartItem = ({ item, selectedOptions }) => {
     dispatch(cartActions.deleteItem(id));
   };
 
+  const availableOptions = [
+    { name: "Café preto", price: 2 },
+    { name: "Cappuccino", price: 3 },
+    { name: "Suco natural", price: 4 },
+  ];
+
   return (
     <ListGroupItem className="border-0 cart__item">
       <div className="cart__item-info d-flex gap-2">
@@ -47,9 +59,14 @@ const CartItem = ({ item, selectedOptions }) => {
                 <p>Opções:</p>
                 <ul>
                   {selectedOptions.map((option, index) => (
-                    <li key={index}>{option}</li>
+                    <li key={index}>
+                      {option.name} (+R${option.price})
+                    </li>
                   ))}
                 </ul>
+                <button onClick={toggleModificationMode}>
+                  Modificar Opções
+                </button>
               </div>
             )}
             <div className=" d-flex align-items-center justify-content-between increase__decrease-btn">

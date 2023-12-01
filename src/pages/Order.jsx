@@ -192,7 +192,9 @@ const Tr = (props) => {
       <td className="text-center">
         <ul>
           {selectedOptions.map((option, index) => (
-            <li key={index}>{option}</li>
+            <li key={index}>
+              {option.name} (+R${option.price})
+            </li>
           ))}
         </ul>
       </td>
