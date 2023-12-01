@@ -9,13 +9,6 @@ const CartItem = ({ item, selectedOptions }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
 
   const dispatch = useDispatch();
-  const [modificationMode, setModificationMode] = useState(false);
-  const [modifiedOptions, setModifiedOptions] = useState([]);
-
-  const toggleModificationMode = () => {
-    setModificationMode(!modificationMode);
-    setModifiedOptions([...selectedOptions]); // Copy the selectedOptions to modifiedOptions
-  };
 
   const incrementItem = () => {
     dispatch(
@@ -58,9 +51,6 @@ const CartItem = ({ item, selectedOptions }) => {
                     </li>
                   ))}
                 </ul>
-                <button onClick={toggleModificationMode}>
-                  Modificar Opções
-                </button>
               </div>
             )}
             <div className=" d-flex align-items-center justify-content-between increase__decrease-btn">
