@@ -29,7 +29,7 @@ const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  let typeObj = {icon: 'home'}
+  let typeObj = { icon: "home" };
 
   useEffect(() => {
     if (category === "ALL") {
@@ -76,7 +76,7 @@ const Home = () => {
 
           if (response.status === 200) {
             const userName = Cookies.get("userName");
-            dispatch(setUser({username: userUsername, name: userName}));
+            dispatch(setUser({ username: userUsername, name: userName }));
           }
         } catch (error) {
           dispatch(setUser());
@@ -85,7 +85,7 @@ const Home = () => {
       }
     };
 
-    verifyUser()
+    verifyUser();
   }, [category, navigate, dispatch]);
 
   return (
@@ -97,18 +97,20 @@ const Home = () => {
               <div className="hero__content  ">
                 <h5 className="mb-3">Entrega fácil e rápida!</h5>
                 <h1 className="mb-4 hero__title">
-                  <span>Aproveite!</span> <br /> O melhor <span>cupcake</span> da região chegou!
+                  <span>Aproveite!</span> <br /> O melhor <span>cupcake</span>{" "}
+                  da região chegou!
                 </h1>
 
-                <p>
-                  Se delicie com os renomados docinhos da Cid Cakes!
-                </p>
+                <p>Se delicie com os renomados docinhos da Cid Cakes!</p>
 
-                <div className="hero__btns d-flex align-items-center gap-5 mt-4">
+                <Link
+                  to="/foods"
+                  className="hero__btns d-flex align-items-center gap-5 mt-4"
+                >
                   <button className="order__btn d-flex align-items-center justify-content-between">
-                  <Link to="/foods">Peça um agora <i className="ri-arrow-right-s-line"></i> </Link>
+                    Peça um agora <i className="ri-arrow-right-s-line"></i>
                   </button>
-                </div>
+                </Link>
 
                 <div className=" hero__service  d-flex align-items-center gap-5 mt-5 ">
                   <p className=" d-flex align-items-center gap-2 ">
@@ -140,7 +142,6 @@ const Home = () => {
       <section className="pt-0">
         <Category {...typeObj} />
       </section>
-
 
       <section>
         <Container>
@@ -199,7 +200,6 @@ const Home = () => {
           </Row>
         </Container>
       </section>
-
     </Helmet>
   );
 };
